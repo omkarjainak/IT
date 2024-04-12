@@ -1,20 +1,21 @@
 import { message, Table } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { GetAllDoctors, UpdateDoctor } from "../../apicalls/doctors";
+import { GetAllClients, UpdateClient } from "../../apicalls/clients"; // Update import
 import { ShowLoader } from "../../redux/loaderSlice";
 
-function DoctorsList() {
-  const [doctors, setDoctors] = React.useState([]);
+function ClientsList() { // Change component name
+  const [clients, setClients] = React.useState([]); // Change variable name
 
   const dispatch = useDispatch();
+
   const getData = async () => {
     try {
       dispatch(ShowLoader(true));
-      const response = await GetAllDoctors();
+      const response = await GetAllClients(); // Update function call
       dispatch(ShowLoader(false));
       if (response.success) {
-        setDoctors(response.data);
+        setClients(response.data);
       } else {
         throw new Error(response.message);
       }
@@ -27,7 +28,7 @@ function DoctorsList() {
   const changeStatus = async (payload) => {
     try {
       dispatch(ShowLoader(true));
-      const response = await UpdateDoctor(payload);
+      const response = await UpdateClient(payload); // Update function call
       dispatch(ShowLoader(false));
       if (response.success) {
         message.success(response.message);
@@ -62,10 +63,7 @@ function DoctorsList() {
       title: "Phone",
       dataIndex: "phone",
     },
-    {
-      title: "Speciality",
-      dataIndex: "speciality",
-    },
+   
     {
       title: "Status",
       dataIndex: "status",
@@ -144,11 +142,12 @@ function DoctorsList() {
       },
     },
   ];
+  
   return (
     <div>
-      <Table columns={columns} dataSource={doctors} />
+      <Table columns={columns} dataSource={clients} scroll={{ x: 1000, y: 500 }} /> {/* Change variable name */}
     </div>
   );
 }
 
-export default DoctorsList;
+export default ClientsList; // Update export

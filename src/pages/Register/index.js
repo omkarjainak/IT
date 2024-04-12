@@ -36,7 +36,7 @@ function Register() {
     <div className="flex justify-center items-center h-screen">
       <Form layout="vertical" className="w-400 bg-white p-2" onFinish={onFinsh}>
         <h2 className="uppercase my-1">
-          <strong>SHEYHELTHY Register</strong>
+          <strong> Register</strong>
         </h2>
         <hr />
         <Form.Item label="Name" name="name">

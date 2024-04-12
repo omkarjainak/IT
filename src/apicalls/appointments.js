@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import firestoreDatabase from "../firebaseConfig";
 
-export const BookDoctorAppointment = async (payload) => {
+export const BookClientAppointment = async (payload) => {
   try {
     await addDoc(collection(firestoreDatabase, "appointments"), payload);
     return { success: true, message: "Appointment booked successfully" };
@@ -18,12 +18,12 @@ export const BookDoctorAppointment = async (payload) => {
   }
 };
 
-export const GetDoctorAppointmentsOnDate = async (doctorId, date) => {
+export const GetClientAppointmentsOnDate = async (clientId, date) => {
   try {
     const querySnapshot = await getDocs(
       query(
         collection(firestoreDatabase, "appointments"),
-        where("doctorId", "==", doctorId),
+        where("clientId", "==", clientId),
         where("date", "==", date)
       )
     );
@@ -37,12 +37,12 @@ export const GetDoctorAppointmentsOnDate = async (doctorId, date) => {
   }
 };
 
-export const GetDoctorAppointments = async (doctorId) => {
+export const GetClientAppointments = async (clientId) => {
   try {
     const querySnapshot = await getDocs(
       query(
         collection(firestoreDatabase, "appointments"),
-        where("doctorId", "==", doctorId)
+        where("clientId", "==", clientId)
       )
     );
     const data = [];

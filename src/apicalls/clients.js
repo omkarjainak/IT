@@ -11,17 +11,17 @@ import {
 } from "firebase/firestore";
 import firestoreDatabase from "../firebaseConfig";
 
-export const AddDoctor = async (payload) => {
+export const AddClient = async (payload) => {
   try {
-    await setDoc(doc(firestoreDatabase, "doctors", payload.userId), payload);
+    await setDoc(doc(firestoreDatabase, "client", payload.userId), payload);
 
     // update user role
     await updateDoc(doc(firestoreDatabase, "users", payload.userId), {
-      role: "doctor",
+      role: "client",
     });
     return {
       success: true,
-      message: "Doctor added successfully , please wait for approval",
+      message: "Client added successfully, please wait for approval",
     };
   } catch (error) {
     return {
@@ -31,26 +31,26 @@ export const AddDoctor = async (payload) => {
   }
 };
 
-export const CheckIfDoctorAccountIsApplied = async (id) => {
+export const CheckIfClientAccountIsApplied = async (id) => {
   try {
-    const doctors = await getDocs(
-      query(collection(firestoreDatabase, "doctors"), where("userId", "==", id))
+    const clients = await getDocs(
+      query(collection(firestoreDatabase, "client"), where("userId", "==", id))
     );
-    if (doctors.size > 0) {
+    if (clients.size > 0) {
       return {
         success: true,
-        message: "Doctor account already applied",
-        data : doctors.docs.map((doc) => {
+        message: "Client account already applied",
+        data: clients.docs.map((doc) => {
           return {
             ...doc.data(),
             id: doc.id,
           };
-        })[0]
+        })[0],
       };
     }
     return {
       success: false,
-      message: "Doctor account not applied",
+      message: "Client account not applied",
     };
   } catch (error) {
     return {
@@ -60,12 +60,12 @@ export const CheckIfDoctorAccountIsApplied = async (id) => {
   }
 };
 
-export const GetAllDoctors = async () => {
+export const GetAllClients = async () => {
   try {
-    const doctors = await getDocs(collection(firestoreDatabase, "doctors"));
+    const clients = await getDocs(collection(firestoreDatabase, "client"));
     return {
       success: true,
-      data: doctors.docs.map((doc) => {
+      data: clients.docs.map((doc) => {
         return {
           ...doc.data(),
           id: doc.id,
@@ -80,13 +80,12 @@ export const GetAllDoctors = async () => {
   }
 };
 
-
-export const UpdateDoctor = async (payload) => {
+export const UpdateClient = async (payload) => {
   try {
-    await setDoc(doc(firestoreDatabase, "doctors", payload.id), payload);
+    await setDoc(doc(firestoreDatabase, "client", payload.id), payload);
     return {
       success: true,
-      message: "Doctor updated successfully",
+      message: "Client updated successfully",
     };
   } catch (error) {
     return {
@@ -94,15 +93,14 @@ export const UpdateDoctor = async (payload) => {
       message: error.message,
     };
   }
-}
+};
 
-
-export const GetDoctorById = async (id) => {
+export const GetClientById = async (id) => {
   try {
-    const doctor = await getDoc(doc(firestoreDatabase, "doctors", id));
+    const client = await getDoc(doc(firestoreDatabase, "client", id));
     return {
       success: true,
-      data: doctor.data(),
+      data: client.data(),
     };
   } catch (error) {
     return {
@@ -110,4 +108,4 @@ export const GetDoctorById = async (id) => {
       message: error.message,
     };
   }
-}
+};

@@ -1,5 +1,5 @@
 import firestoreDatabase from "../firebaseConfig";
-import { collection, addDoc, getDocs, query, where, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs,updateDoc, query, where, getDoc, doc,setDoc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 
 export const CreateUser = async (payload) => {
@@ -94,3 +94,103 @@ export const GetUserById = async (id) => {
     return error;
   }
 }
+
+export const saveUserData = async (id, userData) => {
+  try {
+    const userRef = doc(firestoreDatabase, "users", id);
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+     
+      await setDoc(userRef, { ...userData }, { merge: true });
+      console.log("User data updated successfully!");
+    } else {
+      console.error("User document does not exist.");
+      
+    }
+  } catch (error) {
+    console.error("Error updating user data:", error.message);
+    // Handle the error appropriately
+  }
+};
+
+export const getprofiledata=async(id)=>{
+  try{
+    const user =await getDoc(firestoreDatabase,"profile",id );
+    return{
+      success:true,
+      data:{
+        ...user.data(),
+        id:user.id,
+      },
+    }
+  }catch(error){
+    return error;
+
+  }
+};
+export const UpdateUserPassword = async (userId, newPassword) => {
+  try {
+    
+    const userRef = doc(firestoreDatabase, "users", userId);
+
+    
+    const userDoc = await getDoc(userRef);
+    if (!userDoc.exists()) {
+      throw new Error("User not found");
+    }
+
+   
+    const bytes = CryptoJS.AES.decrypt(userDoc.data().password, "sheyjobs-lite");
+    const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+    
+    if (originalPassword !== newPassword) {
+      
+      const encryptedNewPassword = CryptoJS.AES.encrypt(newPassword, "sheyjobs-lite").toString();
+
+      
+      await updateDoc(userRef, { password: encryptedNewPassword });
+
+      return {
+        success: true,
+        message: "Password updated successfully",
+      };
+    } else {
+      throw new Error("New password should be different from the current one");
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const UpdateUserRole = async (userId, newRole) => {
+  try {
+    const userRef = doc(firestoreDatabase, "users", userId);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      throw new Error("User not found");
+    }
+
+    // Check if the new role is different from the current one
+    if (userDoc.data().role !== newRole) {
+      await updateDoc(userRef, { role: newRole });
+
+      return {
+        success: true,
+        message: "User role updated successfully",
+      };
+    } else {
+      throw new Error("New role should be different from the current one");
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};

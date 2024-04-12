@@ -4,11 +4,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Spinner from "./components/Spinner";
 import Admin from "./pages/Admin";
 import BookAppointment from "./pages/BookAppointment";
-import DoctorForm from "./pages/DoctorForm";
+
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
+
+import Login from "./pages/Login";
+import ClientForm from "./pages/ClientForm";
 
 function App() {
   const { loading } = useSelector((state) => state.loader);
@@ -17,7 +20,8 @@ function App() {
       {loading && <Spinner />}
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+       
+          <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/"
@@ -44,10 +48,10 @@ function App() {
             }
           />
           <Route
-            path="/apply-doctor"
+            path="/apply-client"
             element={
               <ProtectedRoute>
-                <DoctorForm />
+                <ClientForm />
               </ProtectedRoute>
             }
           />

@@ -1,22 +1,25 @@
-import { Col, Form, message, Row } from "antd";
-import React, { useEffect } from "react";
+import { Col, Form, message, Row, DatePicker } from "antd";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
-  AddDoctor,
-  CheckIfDoctorAccountIsApplied,
-  GetDoctorById,
-  UpdateDoctor,
-} from "../../apicalls/doctors";
+  AddClient,
+  CheckIfClientAccountIsApplied,
+  GetClientById,
+  UpdateClient,
+} from "../../apicalls/clients"; // Updated import
 import { ShowLoader } from "../../redux/loaderSlice";
+import moment from "moment";
 
-function DoctorForm() {
+function ClientForm() {
   const [form] = Form.useForm();
-  const [alreadyApproved, setAlreadyApproved] = React.useState(false);
-  const [days, setDays] = React.useState([]);
-  const [alreadyApplied, setAlreadyApplied] = React.useState(false);
+  const [alreadyApproved, setAlreadyApproved] = useState(false);
+  const [days, setDays] = useState([]);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
+  const [excludedDates, setExcludedDates] = useState([null]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const onFinish = async (values) => {
     try {
       dispatch(ShowLoader(true));
@@ -25,15 +28,16 @@ function DoctorForm() {
         days,
         userId: JSON.parse(localStorage.getItem("user")).id,
         status: "pending",
-        role: "doctor",
+        role: "client",
+        excludedDates,
       };
       let response = null;
       if (alreadyApproved) {
         payload.id = JSON.parse(localStorage.getItem("user")).id;
         payload.status = "approved";
-        response = await UpdateDoctor(payload);
+        response = await UpdateClient(payload);
       } else {
-        response = await AddDoctor(payload);
+        response = await AddClient(payload);
       }
 
       if (response.success) {
@@ -52,7 +56,7 @@ function DoctorForm() {
   const checkIfAlreadyApplied = async () => {
     try {
       dispatch(ShowLoader(true));
-      const response = await CheckIfDoctorAccountIsApplied(
+      const response = await CheckIfClientAccountIsApplied(
         JSON.parse(localStorage.getItem("user")).id
       );
       if (response.success) {
@@ -75,24 +79,23 @@ function DoctorForm() {
   useEffect(() => {
     checkIfAlreadyApplied();
   }, []);
+
+  const handleExcludedDatesChange = (e) => {
+    const inputDates = e.target.value.split(',').map(date => date.trim());
+    const formattedDates = inputDates.map(date => moment(date, "YYYY-MM-DD").format("YYYY-MM-DD"));
+    setExcludedDates(formattedDates);
+  };
+
   return (
     <div className="bg-white p-2">
       {(!alreadyApplied || alreadyApproved) && (
         <>
-          {" "}
           <h3 className="uppercase my-1">
-            {alreadyApproved ? "Update your information" : "Apply as a doctor"}
+            {alreadyApproved ? "Update your information" : "Apply as a client"}
           </h3>
           <hr />
-          <Form
-            layout="vertical"
-            className="my-1"
-            onFinish={onFinish}
-            form={form}
-          >
+          <Form layout="vertical" className="my-1" onFinish={onFinish} form={form}>
             <Row gutter={[16, 16]}>
-              {/* personal information */}
-
               <Col span={24}>
                 <h4 className="uppercase">
                   <b>Personal Information</b>
@@ -187,82 +190,12 @@ function DoctorForm() {
                 <hr />
               </Col>
 
-              {/* professional information */}
-              <Col span={24}>
-                <h4 className="uppercase">
-                  <b>Professional Information</b>
-                </h4>
-              </Col>
-              <Col span={8}>
-                <Form.Item
-                  label="Speciality"
-                  name="speciality"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Required",
-                    },
-                  ]}
-                >
-                  <select>
-                    <option value="dermetologist">Dermetologist</option>
-                    <option value="cardiologist">Cardiologist</option>
-                    <option value="gynecologist">Gynecologist</option>
-                    <option value="neurologist">Neurologist</option>
-                    <option value="orthopedic">Orthopedic</option>
-                    <option value="pediatrician">Pediatrician</option>
-                    <option value="psychiatrist">Psychiatrist</option>
-                    <option value="surgeon">Surgeon</option>
-                    <option value="urologist">Urologist</option>
-                  </select>
-                </Form.Item>
-              </Col>
-
-              <Col span={8}>
-                <Form.Item
-                  label="Experience"
-                  name="experience"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Required",
-                    },
-                  ]}
-                >
-                  <input type="number" />
-                </Form.Item>
-              </Col>
-
-              <Col span={8}>
-                <Form.Item
-                  label="Qualification"
-                  name="qualification"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Required",
-                    },
-                  ]}
-                >
-                  <select>
-                    <option value="MBBS">MBBS</option>
-                    <option value="MD">MD</option>
-                    <option value="MS">MS</option>
-                    <option value="MDS">MDS</option>
-                  </select>
-                </Form.Item>
-              </Col>
-
-              <Col span={24}>
-                <hr />
-              </Col>
-
               <Col span={24}>
                 <h4 className="uppercase">
                   <b>Work Hours</b>
                 </h4>
               </Col>
-              {/* work hours */}
+
               <Col span={8}>
                 <Form.Item
                   label="Start Time"
@@ -292,11 +225,10 @@ function DoctorForm() {
                   <input type="time" />
                 </Form.Item>
               </Col>
-
-              <Col span={8}>
+              <Col span={24}>
                 <Form.Item
-                  label="Fee"
-                  name="fee"
+                  label="Excluded Dates"
+                  name="excludedDates"
                   rules={[
                     {
                       required: true,
@@ -304,41 +236,63 @@ function DoctorForm() {
                     },
                   ]}
                 >
-                  <input type="number" />
+                  <input
+                    type="text"
+                    placeholder="Enter excluded dates, separated by commas (YYYY-MM-DD)"
+                    value={excludedDates.join(', ')}
+                    onChange={handleExcludedDatesChange}
+                  />
                 </Form.Item>
-              </Col>
-
-              <Col span={24}>
-                <div className="flex gap-2">
-                  {[
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday",
-                  ].map((day, index) => (
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        key={index}
-                        checked={days.includes(day)}
-                        value={day}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setDays([...days, e.target.value]);
-                          } else {
-                            setDays(
-                              days.filter((item) => item !== e.target.value)
-                            );
-                          }
-                        }}
-                      />
-                      <label>{day}</label>
+                <div>
+                  {/* Display the list of excluded dates with a button to remove each date */}
+                  {excludedDates.map((date) => (
+                    <div key={date}>
+                      {date}
+                      <button type="button" onClick={() => setExcludedDates((prevDates) => prevDates.filter((d) => d !== date))}>
+                        Remove
+                      </button>
                     </div>
                   ))}
                 </div>
+              </Col>
+
+              <Col span={20}>
+                <Col span={24}>
+                  <Form.Item
+                    label="Excluded Slots"
+                    name="excludedslots"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Required",
+                      },
+                    ]}
+                  >
+                    <input type="text" placeholder="Enter excluded slots, separated by commas" />
+                  </Form.Item>
+                </Col>
+
+                <Col span={10}>
+                  <div className="flex flex-col flex-gap-2">
+                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day, index) => (
+                      <div className="flex items-center" key={index}>
+                        <label style={{ minWidth: '80px', marginRight: '8px' }}>{day}</label>
+                        <input
+                          type="checkbox"
+                          checked={days.includes(day)}
+                          value={day}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setDays([...days, e.target.value]);
+                            } else {
+                              setDays(days.filter((item) => item !== e.target.value));
+                            }
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </Col>
               </Col>
             </Row>
 
@@ -357,8 +311,7 @@ function DoctorForm() {
       {alreadyApplied && !alreadyApproved && (
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-secondary">
-            You have already applied for this doctor account , please wait for
-            the admin to approve your request
+            You have already applied for this account, please wait for the admin to approve your request
           </h3>
         </div>
       )}
@@ -366,4 +319,4 @@ function DoctorForm() {
   );
 }
 
-export default DoctorForm;
+export default ClientForm;

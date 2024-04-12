@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { message, Tabs } from "antd";
 import UsersList from "./UsersList";
-import DoctorsList from "./DoctorsList";
+import ClientsList from "./ClientList";
 import { useDispatch } from "react-redux";
 import { ShowLoader } from "../../redux/loaderSlice";
 import { GetUserById } from "../../apicalls/users";
+
 
 function Admin() {
   const [isAdmin, setIsAdmin] = React.useState(false);
@@ -36,8 +37,8 @@ function Admin() {
         <Tabs.TabPane tab="Users" key="1">
           <UsersList />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Doctors" key="2">
-          <DoctorsList />
+        <Tabs.TabPane tab="APP" key="2">
+          <ClientsList />
         </Tabs.TabPane>
       </Tabs>
     </div>

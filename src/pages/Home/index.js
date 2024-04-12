@@ -2,19 +2,20 @@ import { Col, message, Row } from "antd";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { GetAllDoctors } from "../../apicalls/doctors";
+import { GetAllClients } from "../../apicalls/clients";
 import { ShowLoader } from "../../redux/loaderSlice";
+import Appointments from './../Profile/Appointments';
 
 function Home() {
-  const [doctors = [], setDoctors] = React.useState([]);
+  const [client = [], setClient] = React.useState([]);
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
   const getData = async () => {
     try {
       dispatch(ShowLoader(true));
-      const response = await GetAllDoctors();
+      const response = await GetAllClients();
       if (response.success) {
-        setDoctors(response.data);
+        setClient(response.data);
       } else {
         message.error(response.message);
       }
@@ -31,67 +32,52 @@ function Home() {
   }, []);
   const navigate = useNavigate();
   return (
-   user && <div>
-      <div className="flex justify-between">
-        <div>
-          <input placeholder="Search doctors" className="w-400" />
-        </div>
-        {user?.role !== "doctor" && (
+    <div className="p-1">
+      
+      <div className="flex justify-between items-center mb-4">
+       
+        {user?.role !== "user" && (
           <button
             className="outlined-btn"
-            onClick={() => navigate("/apply-doctor")}
+            onClick={() => navigate("/apply-client")}
           >
-            Apply doctor
+            Apply Appointments
           </button>
         )}
       </div>
 
-      <Row gutter={[16, 16]} className="my-1">
-        {doctors.map((doctor) => {
-          return (
-            <Col span={8}>
+      {/* Main Content */}
+      {user && (
+        <Row gutter={[16, 16]} className="my-1">
+          {client.map((client) => (
+            <Col span={24} sm={12} md={8} lg={8} xl={8} key={client.id}>
               <div
-                className="bg-white p-1 flex flex-col gap-1 cursor-pointer"
-                onClick={() => navigate(`/book-appointment/${doctor.id}`)}
+                className="bg-white p-2 flex flex-col gap-2 cursor-pointer"
+                onClick={() => navigate(`/book-appointment/${client.id}`)}
               >
+                <h2 className="uppercase text-xl font-bold">
+                  {client.firstName} {client.lastName}
+                </h2>
+                <hr className="my-2" />
                 <div className="flex justify-between w-full">
-                  <h2 className="uppercase">
-                    {doctor.firstName} {doctor.lastName}
-                  </h2>
-                </div>
-                <hr />
-                <div className="flex justify-between w-full">
-                  <h4>
-                    <b>Speciality : </b>
-                  </h4>
-                  <h4>{doctor.speciality}</h4>
-                </div>
-                <div className="flex justify-between w-full">
-                  <h4>
-                    <b>Experience : </b>
-                  </h4>
-                  <h4>
-                    {doctor.experience}
-                    Years
-                  </h4>
-                </div>
-                <div className="flex justify-between w-full">
-                  <h4>
-                    <b>Email : </b>
-                  </h4>
-                  <h4>{doctor.email}</h4>
-                </div>
-                <div className="flex justify-between w-full">
-                  <h4>
-                    <b>Phone : </b>
-                  </h4>
-                  <h4>{doctor.phone}</h4>
+                  <div>
+                    <h4>
+                      <b>Email : </b>
+                    </h4>
+                    <p>{client.email}</p>
+                  </div>
+                  <div>
+                    <h4>
+                      <b>Phone : </b>
+                    </h4>
+                    <p>{client.phone}</p>
+                  </div>
                 </div>
               </div>
             </Col>
-          );
-        })}
-      </Row>
+          ))}
+        </Row>
+      )}
     </div>
   );
 }

@@ -1,0 +1,34 @@
+[debug] [2024-04-12T14:45:06.040Z] ----------------------------------------------------------------------
+[debug] [2024-04-12T14:45:06.046Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\omkar\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2024-04-12T14:45:06.047Z] CLI Version:   13.5.0
+[debug] [2024-04-12T14:45:06.048Z] Platform:      win32
+[debug] [2024-04-12T14:45:06.048Z] Node Version:  v21.1.0
+[debug] [2024-04-12T14:45:06.048Z] Time:          Fri Apr 12 2024 20:15:06 GMT+0530 (India Standard Time)
+[debug] [2024-04-12T14:45:06.049Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-04-12T14:45:06.289Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-04-12T14:45:06.291Z] > authorizing via signed-in user (omkarjainak2021.it@mmcoe.edu.in)
+[debug] [2024-04-12T14:45:06.292Z] [iam] checking project appointment-9db8d for permissions ["firebase.projects.get"]
+[debug] [2024-04-12T14:45:06.295Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/appointment-9db8d:testIamPermissions [none]
+[debug] [2024-04-12T14:45:06.296Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/appointment-9db8d:testIamPermissions x-goog-quota-user=projects/appointment-9db8d
+[debug] [2024-04-12T14:45:06.296Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/appointment-9db8d:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-04-12T14:45:08.451Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/appointment-9db8d:testIamPermissions 200
+[debug] [2024-04-12T14:45:08.452Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/appointment-9db8d:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-04-12T14:45:08.453Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d [none]
+[debug] [2024-04-12T14:45:09.458Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d 200
+[debug] [2024-04-12T14:45:09.458Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d {"projectId":"appointment-9db8d","projectNumber":"57968344742","displayName":"appointment","name":"projects/appointment-9db8d","resources":{"hostingSite":"appointment-9db8d","realtimeDatabaseInstance":"appointment-9db8d-default-rtdb","storageBucket":"appointment-9db8d.appspot.com","locationId":"asia-south1"},"state":"ACTIVE","etag":"1_48a99286-f142-4076-871c-4e425c8d28b1"}
+[info] 
+[info] === Serving from 'C:\Users\omkar\Desktop\New folder (14)\sheyhealthy-lite'...
+[info] 
+[debug] [2024-04-12T14:45:09.466Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/appointment-9db8d/sites 
+[debug] [2024-04-12T14:45:10.925Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/appointment-9db8d/sites 200
+[debug] [2024-04-12T14:45:10.925Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/appointment-9db8d/sites {"sites":[{"name":"projects/appointment-9db8d/sites/appointment-9db8d","defaultUrl":"https://appointment-9db8d.web.app","appId":"1:57968344742:web:dcc4224c4c043e5897be67","type":"DEFAULT_SITE"}]}
+[debug] [2024-04-12T14:45:10.926Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d/webApps/1:57968344742:web:dcc4224c4c043e5897be67/config [none]
+[debug] [2024-04-12T14:45:12.036Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d/webApps/1:57968344742:web:dcc4224c4c043e5897be67/config 200
+[debug] [2024-04-12T14:45:12.037Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d/webApps/1:57968344742:web:dcc4224c4c043e5897be67/config {"projectId":"appointment-9db8d","appId":"1:57968344742:web:dcc4224c4c043e5897be67","databaseURL":"https://appointment-9db8d-default-rtdb.firebaseio.com","storageBucket":"appointment-9db8d.appspot.com","locationId":"asia-south1","apiKey":"AIzaSyChvE3HILaIfHJGy7yB1I5hhir_K4Apjx8","authDomain":"appointment-9db8d.firebaseapp.com","messagingSenderId":"57968344742","measurementId":"G-FMYJ57FDGC"}
+[debug] [2024-04-12T14:45:12.048Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d [none]
+[debug] [2024-04-12T14:45:12.621Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d 200
+[debug] [2024-04-12T14:45:12.622Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/appointment-9db8d {"projectId":"appointment-9db8d","projectNumber":"57968344742","displayName":"appointment","name":"projects/appointment-9db8d","resources":{"hostingSite":"appointment-9db8d","realtimeDatabaseInstance":"appointment-9db8d-default-rtdb","storageBucket":"appointment-9db8d.appspot.com","locationId":"asia-south1"},"state":"ACTIVE","etag":"1_48a99286-f142-4076-871c-4e425c8d28b1"}
+[info] i  hosting[appointment-9db8d]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[appointment-9db8d]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[info] i  hosting: ::1 - - [12/Apr/2024:14:45:33 +0000] "GET /__/firebase/init.js?useEmulator=true HTTP/1.1" 200 - "http://localhost:5000/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"::1 - - [12/Apr/2024:14:45:33 +0000] \"GET /__/firebase/init.js?useEmulator=true HTTP/1.1\" 200 - \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36\""}}
